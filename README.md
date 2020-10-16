@@ -24,7 +24,6 @@ Fetch markdown content from api and write to files with frontmatter and componen
 
 [Report Bug][issues-url] • [Request Feature][issues-url]
 
-<!-- TABLE OF CONTENTS -->
 ## Table of Contents
 
 * [About the Project](#about-the-project)
@@ -39,13 +38,11 @@ Fetch markdown content from api and write to files with frontmatter and componen
 * [Contact](#contact)
 * [Acknowledgements](#acknowledgements)
 
-<!-- ABOUT THE PROJECT -->
 ## About The Project
 
 Fetch to Markdown solves a common problem when working with a headless CMS by simply fetching your content at a provided api endpoint and writing to markdown files. It supports writing custom frontmatter and appending component tags to each file.
 
-<!-- GETTING STARTED -->
-## ☕️ Getting Started
+## ☕️ Usage
 
 Usage is simple and assumes a REST api endpoint.
 
@@ -103,17 +100,14 @@ Check out the [issues page][issues-url]
 4. Push to the Branch (`git push origin release/my-project`)
 5. Open a Pull Request
 
-<!-- ROADMAP -->
 ## 🗺 Roadmap
 
 See the [open issues][issues-url] for a list of proposed features (and known issues)
 
-<!-- DEPENDENCIES -->
 ## 📦 Dependencies
 
 [![FOSSA Status][fossa-scan]][fossa-url]
 
-<!-- ACKNOWLEDGEMENTS -->
 ## ✨ Acknowledgements
 
 * [Best README Template](https://github.com/othneildrew/Best-README-Template/blob/master/README.md)
