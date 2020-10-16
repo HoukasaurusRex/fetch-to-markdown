@@ -11,10 +11,10 @@
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![Language grade: JavaScript][lgtm-shield]][lgtm-url]
-[![FOSSA Status][fossa-shield]][fossa-url]
 [![Maintenance][maintenance-shield]][maintenance-url]
 [![David Dependencies Status][dependencies-shield]][dependencies-url]
 [![License: MIT][license-shield]][license-url]
+[![FOSSA Status][fossa-shield]][fossa-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 [![Twitter: HoukasaurusRex][twitter-shield]][twitter-url]
 
@@ -94,12 +94,6 @@ Want to make a change? Any contributions you make are **greatly appreciated**.
 
 Check out the [issues page][issues-url]
 
-1. Clone the repo
-2. Create your Feature Branch (`gco -b release/my-project`)
-3. Commit your Changes (`git commit -m 'add: small addition'`)
-4. Push to the Branch (`git push origin release/my-project`)
-5. Open a Pull Request
-
 ## 🗺 Roadmap
 
 See the [open issues][issues-url] for a list of proposed features (and known issues)
@@ -107,12 +101,6 @@ See the [open issues][issues-url] for a list of proposed features (and known iss
 ## 📦 Dependencies
 
 [![FOSSA Status][fossa-scan]][fossa-url]
-
-## ✨ Acknowledgements
-
-* [Best README Template](https://github.com/othneildrew/Best-README-Template/blob/master/README.md)
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [Img Shields](https://shields.io)
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
