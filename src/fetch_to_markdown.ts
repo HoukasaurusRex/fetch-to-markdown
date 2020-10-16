@@ -13,8 +13,8 @@ type item = {
 type config = {
   components?: [string],
   readme?: string,
-  landing?: string,
-  path?: string
+  landing?: boolean,
+  contentDir?: string
 }
 
 const fs = promises
@@ -36,8 +36,6 @@ const addFrontmatterToContent = (items: Array<item>) => {
   }))
 }
 
-// @ts-ignore
-const contentDir = path.join(path.dirname(require.main.filename), '/content')
 const dirExists = async (dir: string) => !!(await fs.stat(dir).catch((_) => false))
 const mkDirIfNotExists = async (dir: string) =>
   (await dirExists(dir)) || (await fs.mkdir(dir))
@@ -45,21 +43,21 @@ const safeFilename = (name: string) =>
   name.toLowerCase().replace(/[^a-z0-9]/gi, '_')
 const titleToFilename = (title: string) => safeFilename(title) + '.md'
 
-const writeFiles = async ({ items, folder }: {items: Array<item>, folder: string}) => {
-  await mkDirIfNotExists(`${contentDir}/${folder}`)
+const writeFiles = async (contentPath: string, { items, folder }: {items: Array<item>, folder: string}) => {
+  await mkDirIfNotExists(`${contentPath}/${folder}`)
   return Promise.all(
     items.map(async (item: item) => {
       return fs.writeFile(
-        `${contentDir}/${folder}/${titleToFilename(item.title)}`,
+        `${contentPath}/${folder}/${titleToFilename(item.title)}`,
         item.content
       )
     })
   )
 }
-const writeFile = async (content: string = '', folder: string) => {
-  await mkDirIfNotExists(`${contentDir}/${folder}`)
+const writeFile = async (contentPath: string, content: string = '', folder: string) => {
+  await mkDirIfNotExists(`${contentPath}/${folder}`)
   return fs.writeFile(
-    `${contentDir}${folder ? '/' : ''}${folder}/README.md`,
+    `${contentPath}${folder ? '/' : ''}${folder}/README.md`,
     content
   )
 }
@@ -71,14 +69,15 @@ const appendComponents = (item: item, components: [string]) => {
   }
 }
 
-export const fetchToMarkdown = async (contentAPI: string, resource: string, config: config = { components: [''], readme: '', landing: 'landing', path: '/' } ) => {
+export const fetchToMarkdown = async (contentAPI: string, resource: string, config: config = { } ) => {
   if (!contentAPI) {
     throw new Error('contentAPI is required')
   } else if (!resource) {
     throw new Error('resource is required')
   }
-  const  { components = [''], readme = '', landing = 'landing', path = '/' } = config
-  const folder = resource === landing ? '' : resource
+  const  { components = [''], readme = '', landing = false, contentDir = 'content' } = config
+  const contentPath = path.join(path.dirname(require?.main?.filename || '.'), `/${contentDir}`)
+  const folder = landing === true ? '' : resource
   const res = await fetch(`${contentAPI}${path}${resource}`)
   const body: item | [item] = await res.json()
   const content =
@@ -97,10 +96,10 @@ export const fetchToMarkdown = async (contentAPI: string, resource: string, conf
       : itemsWithComponents
   const files =
     sortedItems instanceof Array
-      ? await writeFiles({ items: sortedItems, folder })
-      : await writeFile(sortedItems.content, folder)
+      ? await writeFiles(contentPath, { items: sortedItems, folder })
+      : await writeFile(contentPath, sortedItems.content, folder)
   if (readme) {
-    await writeFile(readme, folder)
+    await writeFile(contentPath, readme, folder)
   }
   console.log(
     `Successfully wrote ${files ? files.length : 'page:'} ${resource}!`
