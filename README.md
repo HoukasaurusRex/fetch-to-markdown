@@ -117,8 +117,8 @@ See the [open issues][issues-url] for a list of proposed features (and known iss
 [issues-url]: https://github.com/HoukasaurusRex/fetch-to-markdown/issues
 [maintenance-shield]: https://img.shields.io/badge/Maintained%3F-yes-green.svg
 [maintenance-url]: https://github.com/HoukasaurusRex/houkasaurus/graphs/commit-activity
-[dependencies-shield]: https://david-dm.org/HoukasaurusRex/houkasaurus.svg
-[dependencies-url]: https://david-dm.org/HoukasaurusRex/houkasaurus
+[dependencies-shield]: https://david-dm.org/HoukasaurusRex/fetch-to-markdown.svg
+[dependencies-url]: https://david-dm.org/HoukasaurusRex/fetch-to-markdown
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/jt-houk/
 [product-url]: https://www.npmjs.com/package/fetch-to-markdown
