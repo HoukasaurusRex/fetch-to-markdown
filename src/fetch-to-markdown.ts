@@ -69,6 +69,7 @@ const appendComponents = (item: item, components: [string]) => {
   }
 }
 
+/** Fetches resource content from contentAPI and writes to markdown files */
 export const fetchToMarkdown = async (contentAPI: string, resource: string, config: config = { } ) => {
   if (!contentAPI) {
     throw new Error('contentAPI is required')
@@ -79,7 +80,7 @@ export const fetchToMarkdown = async (contentAPI: string, resource: string, conf
   const contentPath = path.join(path.dirname(require?.main?.filename || '.'), `/${contentDir}`)
   const folder = landing === true ? '' : resource
   const res = await fetch(`${contentAPI}${path}${resource}`)
-  const body: item | [item] = await res.json()
+  const body: item | Array<item> = await res.json()
   const content =
     body instanceof Array
       ? addFrontmatterToContent(body)

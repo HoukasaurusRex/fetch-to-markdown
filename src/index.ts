@@ -1,1 +1,1 @@
-export * from './fetch_to_markdown'
+export * from './fetch-to-markdown'
