@@ -27,17 +27,17 @@ const addFrontmatterToContent = (items) => {
 };
 const dirExists = async (dir) => !!(await fs.stat(dir).catch((_) => false));
 const mkDirIfNotExists = async (dir) => (await dirExists(dir)) || (await fs.mkdir(dir));
-const safeFilename = (name) => name.toLowerCase().replace(/[^a-z0-9]/gi, '_');
+const safeFilename = (name) => name.toLowerCase().replace(/[^a-z0-9]/gi, '-');
 const titleToFilename = (title) => safeFilename(title) + '.md';
-const writeFiles = async (contentPath, { items, folder }) => {
-    await mkDirIfNotExists(`${contentPath}/${folder}`);
+const writeFiles = async (dir, items) => {
+    await mkDirIfNotExists(dir);
     return Promise.all(items.map(async (item) => {
-        return fs.writeFile(`${contentPath}/${folder}/${titleToFilename(item.title)}`, item.content);
+        return fs.writeFile(`${dir}/${titleToFilename(item.title)}`, item.content);
     }));
 };
-const writeFile = async (contentPath, content = '', folder) => {
-    await mkDirIfNotExists(`${contentPath}/${folder}`);
-    return fs.writeFile(`${contentPath}${folder ? '/' : ''}${folder}/README.md`, content);
+const writeFile = async (dir, content = '') => {
+    await mkDirIfNotExists(dir);
+    return fs.writeFile(`${dir}/README.md`, content);
 };
 const appendComponents = (item, components) => {
     return {
@@ -48,16 +48,15 @@ const appendComponents = (item, components) => {
 /** Fetches resource content from contentAPI and writes to markdown files */
 exports.fetchToMarkdown = async (contentAPI, resource, config = {}) => {
     var _a;
+    const { components = [''], readme = '', contentDir = '', queryParams = '' } = config;
     if (!contentAPI) {
         throw new Error('contentAPI is required');
     }
     else if (!resource) {
         throw new Error('resource is required');
     }
-    const { components = [''], readme = '', landing = false, contentDir = 'content' } = config;
-    const contentPath = path_1.default.join(path_1.default.dirname(((_a = require === null || require === void 0 ? void 0 : require.main) === null || _a === void 0 ? void 0 : _a.filename) || '.'), `/${contentDir}`);
-    const folder = landing === true ? '' : resource;
-    const res = await node_fetch_1.default(`${contentAPI}${path_1.default}${resource}`);
+    const res = await node_fetch_1.default(`${contentAPI}/${resource}${queryParams}`);
+    const dir = contentDir || path_1.default.join(((_a = require === null || require === void 0 ? void 0 : require.main) === null || _a === void 0 ? void 0 : _a.filename) || __dirname, resource);
     const body = await res.json();
     const content = body instanceof Array
         ? addFrontmatterToContent(body)
@@ -69,10 +68,10 @@ exports.fetchToMarkdown = async (contentAPI, resource, config = {}) => {
         ? itemsWithComponents.sort((a, b) => new Date(b.created_at).valueOf() - new Date(a.created_at).valueOf())
         : itemsWithComponents;
     const files = sortedItems instanceof Array
-        ? await writeFiles(contentPath, { items: sortedItems, folder })
-        : await writeFile(contentPath, sortedItems.content, folder);
+        ? await writeFiles(dir, sortedItems)
+        : await writeFile(dir, sortedItems.content);
     if (readme) {
-        await writeFile(contentPath, readme, folder);
+        await writeFile(dir, readme);
     }
     console.log(`Successfully wrote ${files ? files.length : 'page:'} ${resource}!`);
     return itemsWithComponents;
