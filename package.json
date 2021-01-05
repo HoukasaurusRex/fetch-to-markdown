@@ -1,6 +1,6 @@
 {
   "name": "fetch-to-markdown",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Fetch markdown content from api and write to files with frontmatter and component appending support",
   "main": "dist/index.js",
   "repository": {
