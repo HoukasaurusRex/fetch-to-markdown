@@ -1,4 +1,4 @@
-import {promises} from 'fs'
+import { promises } from 'fs'
 import path from 'path'
 import fetch from 'node-fetch'
 import { omit } from 'lodash'
@@ -14,8 +14,10 @@ type frontmatter = {
 
 }
 
+type components = Array<string>
+
 type config = {
-  components?: [string],
+  components?: components,
   readme?: string,
   contentDir?: string,
   queryParams?: string,
@@ -68,7 +70,7 @@ const writeFile = async (dir: string, content: string = '') => {
   )
 }
 
-const appendComponents = (item: item, components: [string]) => {
+const appendComponents = (item: item, components: components) => {
   return {
     ...item,
     content: `${item.content}\n${components.join('\n')}`,

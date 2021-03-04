@@ -1,6 +1,7 @@
 declare type frontmatter = {};
+declare type components = Array<string>;
 declare type config = {
-    components?: [string];
+    components?: components;
     readme?: string;
     contentDir?: string;
     queryParams?: string;
