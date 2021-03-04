@@ -1,6 +1,6 @@
 {
   "name": "fetch-to-markdown",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "Fetch markdown content from api and write to files with frontmatter and component appending support",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
