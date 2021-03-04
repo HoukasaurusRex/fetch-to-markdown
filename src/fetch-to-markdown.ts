@@ -10,29 +10,35 @@ type item = {
   created_at: string
 }
 
+type frontmatter = {
+
+}
+
 type config = {
   components?: [string],
   readme?: string,
   contentDir?: string,
-  queryParams?: string
+  queryParams?: string,
+  frontmatter?: frontmatter
 }
+
 
 const fs = promises
 
-const jsonToFrontmatter = (json: { }) => `${YAML.stringify(json)}\n---\n`
+const jsonToFrontmatter = (json: { }, frontmatter: frontmatter) => `${YAML.stringify({...json, ...frontmatter})}\n---\n`
 
-const addFrontmatterToPage = (item: item ) => {
+const addFrontmatterToPage = (item: item, frontmatter: frontmatter ) => {
   const meta = omit(item, ['content'])
   return {
     ...item,
-    content: jsonToFrontmatter(meta) + item.content,
+    content: jsonToFrontmatter(meta, frontmatter) + item.content,
   }
 }
-const addFrontmatterToContent = (items: Array<item>) => {
+const addFrontmatterToContent = (items: Array<item>, frontmatter: frontmatter) => {
   const meta = items.map((item) => omit(item, ['content']))
   return items.map((item, i) => ({
     ...item,
-    content: jsonToFrontmatter(meta[i]) + item.content,
+    content: jsonToFrontmatter(meta[i], frontmatter) + item.content,
   }))
 }
 
@@ -82,8 +88,8 @@ export const fetchToMarkdown = async (contentAPI: string, resource: string, conf
   const body: item | Array<item> = await res.json()
   const content =
     body instanceof Array
-      ? addFrontmatterToContent(body)
-      : addFrontmatterToPage(body)
+      ? addFrontmatterToContent(body, config.frontmatter || {})
+      : addFrontmatterToPage(body, config.frontmatter || {})
   const itemsWithComponents =
     content instanceof Array
       ? content.map((item) => appendComponents(item, components))
