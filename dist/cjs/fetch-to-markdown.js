@@ -30,7 +30,8 @@ const mkDirIfNotExists = async (dir) => (await dirExists(dir)) || (await fs.mkdi
 const safeFilename = (name) => name.toLowerCase().replace(/[^a-z0-9]/gi, '-');
 const titleToFilename = (title) => safeFilename(title) + '.md';
 const writeFiles = async (dir, items) => {
-    await mkDirIfNotExists(dir);
+    await fs.rmdir(dir, { recursive: true });
+    await fs.mkdir(dir);
     return Promise.all(items.map(async (item) => {
         return fs.writeFile(`${dir}/${titleToFilename(item.title)}`, item.content);
     }));
@@ -49,12 +50,10 @@ const appendComponents = (item, components) => {
 exports.fetchToMarkdown = async (contentAPI, resource, config = {}) => {
     var _a;
     const { components = [''], readme = '', contentDir = '', queryParams = '' } = config;
-    if (!contentAPI) {
+    if (!contentAPI)
         throw new Error('contentAPI is required');
-    }
-    else if (!resource) {
+    if (!resource)
         throw new Error('resource is required');
-    }
     const res = await node_fetch_1.default(`${contentAPI}/${resource}${queryParams}`);
     const dir = contentDir || path_1.default.join(((_a = require === null || require === void 0 ? void 0 : require.main) === null || _a === void 0 ? void 0 : _a.filename) || __dirname, resource);
     const body = await res.json();

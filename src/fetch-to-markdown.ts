@@ -52,7 +52,8 @@ const safeFilename = (name: string) =>
 const titleToFilename = (title: string) => safeFilename(title) + '.md'
 
 const writeFiles = async (dir: string, items: Array<item>) => {
-  await mkDirIfNotExists(dir)
+  await fs.rmdir(dir, { recursive: true })
+  await fs.mkdir(dir)
   return Promise.all(
     items.map(async (item: item) => {
       return fs.writeFile(
@@ -80,11 +81,9 @@ const appendComponents = (item: item, components: components) => {
 /** Fetches resource content from contentAPI and writes to markdown files */
 export const fetchToMarkdown = async (contentAPI: string, resource: string, config: config = { } ) => {
   const  { components = [''], readme = '', contentDir = '', queryParams = '' } = config
-  if (!contentAPI) {
-    throw new Error('contentAPI is required')
-  } else if (!resource) {
-    throw new Error('resource is required')
-  }
+  if (!contentAPI) throw new Error('contentAPI is required')
+  if (!resource) throw new Error('resource is required')
+
   const res = await fetch(`${contentAPI}/${resource}${queryParams}`)
   const dir = contentDir || path.join(require?.main?.filename || __dirname, resource)
   const body: item | Array<item> = await res.json()
