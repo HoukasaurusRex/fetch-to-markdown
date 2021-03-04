@@ -10,19 +10,19 @@ const node_fetch_1 = __importDefault(require("node-fetch"));
 const lodash_1 = require("lodash");
 const json2yaml_1 = __importDefault(require("json2yaml"));
 const fs = fs_1.promises;
-const jsonToFrontmatter = (json) => `${json2yaml_1.default.stringify(json)}\n---\n`;
-const addFrontmatterToPage = (item) => {
+const jsonToFrontmatter = (json, frontmatter) => `${json2yaml_1.default.stringify({ ...json, ...frontmatter })}\n---\n`;
+const addFrontmatterToPage = (item, frontmatter) => {
     const meta = lodash_1.omit(item, ['content']);
     return {
         ...item,
-        content: jsonToFrontmatter(meta) + item.content,
+        content: jsonToFrontmatter(meta, frontmatter) + item.content,
     };
 };
-const addFrontmatterToContent = (items) => {
+const addFrontmatterToContent = (items, frontmatter) => {
     const meta = items.map((item) => lodash_1.omit(item, ['content']));
     return items.map((item, i) => ({
         ...item,
-        content: jsonToFrontmatter(meta[i]) + item.content,
+        content: jsonToFrontmatter(meta[i], frontmatter) + item.content,
     }));
 };
 const dirExists = async (dir) => !!(await fs.stat(dir).catch((_) => false));
@@ -59,8 +59,8 @@ exports.fetchToMarkdown = async (contentAPI, resource, config = {}) => {
     const dir = contentDir || path_1.default.join(((_a = require === null || require === void 0 ? void 0 : require.main) === null || _a === void 0 ? void 0 : _a.filename) || __dirname, resource);
     const body = await res.json();
     const content = body instanceof Array
-        ? addFrontmatterToContent(body)
-        : addFrontmatterToPage(body);
+        ? addFrontmatterToContent(body, config.frontmatter || {})
+        : addFrontmatterToPage(body, config.frontmatter || {});
     const itemsWithComponents = content instanceof Array
         ? content.map((item) => appendComponents(item, components))
         : appendComponents(content, components);

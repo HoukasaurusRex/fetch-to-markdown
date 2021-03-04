@@ -1,8 +1,10 @@
+declare type frontmatter = {};
 declare type config = {
     components?: [string];
     readme?: string;
     contentDir?: string;
     queryParams?: string;
+    frontmatter?: frontmatter;
 };
 /** Fetches resource content from contentAPI and writes to markdown files */
 export declare const fetchToMarkdown: (contentAPI: string, resource: string, config?: config) => Promise<{

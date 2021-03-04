@@ -2,7 +2,10 @@
   "name": "fetch-to-markdown",
   "version": "1.2.2",
   "description": "Fetch markdown content from api and write to files with frontmatter and component appending support",
-  "main": "dist/index.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
+  "typings": "dist/types/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git://github.com/HoukasaurusRex/fetch-to-markdown.git"
@@ -10,13 +13,18 @@
   "author": "JT Houk <jt1992@gmail.com> (https://jt.houk.space/)",
   "license": "MIT",
   "scripts": {
-    "dev": "tsc -w",
-    "build": "tsc",
+    "dev": "yarn build:esm -w",
+    "prebuild": "rm -rf dist",
+    "build": "concurrently yarn:build:*",
+    "build:cjs": "tsc --outDir dist/cjs --sourceMap --module commonjs",
+    "build:esm": "tsc --outDir dist/esm --sourceMap --module esnext",
+    "build:types": "tsc --emitDeclarationOnly --declaration --declarationDir dist/types",
     "test": "echo 'no tests yet'"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.162",
     "@types/node-fetch": "^2.5.7",
+    "concurrently": "^6.0.0",
     "husky": "^4.3.0",
     "tslint": "^6.1.3",
     "tslint-config-airbnb": "^5.11.2",
